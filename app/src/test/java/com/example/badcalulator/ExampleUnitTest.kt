@@ -1,4 +1,4 @@
-package com.example.badcalulator
+package com.example.badCalculator
 
 import org.junit.Test
 
