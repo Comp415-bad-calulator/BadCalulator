@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.badCalculator.R
 import java.util.*
-import kotlin.math.pow
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             resultTextView.text = resultDisplay
         }
         equalsButton.setOnClickListener {
-            currentDisplay = calculate(currentDisplay).toString()
+            currentDisplay = "%.5f".format(calculate(currentDisplay))
             resultDisplay = currentDisplay
             expressionTextView.text = currentDisplay
             resultTextView.text = resultDisplay
@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
         }
         val stack = ArrayDeque<Double>()
 
-        Log.d("POSTFIX DEBUG", postfix.toString())
         for (item in postfix) {
             val parsedChar: Double? = item.toDoubleOrNull()
 
@@ -113,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             } ?: run {
                 val num2 = stack.pop()
                 val num1 = stack.pop()
-                Log.d(item, item)
                 when (item) {
                     "+" -> stack.push(num1 + num2)
                     "-" -> stack.push(num1 - num2)
@@ -123,7 +121,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        return stack.pop()
+        var randPercent:Double = Random.nextDouble() + 1
+        val randSign:Double = Random.nextDouble()
+        if(randSign < 0.5){
+            randPercent *= -1
+        }
+
+        return stack.pop() * randPercent
     }
 
     private fun parse(input: String): String {
