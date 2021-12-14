@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.badcalculator.MainActivity"
-    android:background="@android:color/black"
     android:orientation="vertical">
 
     <TextView
@@ -14,14 +12,14 @@
         android:layout_gravity="end"
         android:ellipsize="start"
         android:singleLine="true"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="40sp" />
 
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_gravity="end"
         android:ellipsize="end"
         android:singleLine="true"

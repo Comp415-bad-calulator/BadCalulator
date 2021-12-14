@@ -1,6 +1,7 @@
 package com.example.badcalculator
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +16,16 @@ class MainActivity : AppCompatActivity() {
 
         var currentDisplay = ""
         var resultDisplay = ""
+
+        val expressionTextView: TextView = findViewById(R.id.expression)
+        val resultTextView: TextView = findViewById(R.id.result)
+
         val numberButtons = getNumberButtons()
-        for((index, numberButton) in numberButtons.withIndex()){
+        for ((index, numberButton) in numberButtons.withIndex()) {
             numberButton.setOnClickListener {
                 currentDisplay += index
+                expressionTextView.text = currentDisplay
+                resultTextView.text = resultDisplay
             }
         }
 
@@ -27,31 +34,52 @@ class MainActivity : AppCompatActivity() {
         val multiplyButton: Button = findViewById(R.id.multiply)
         val divideButton: Button = findViewById(R.id.divide)
 
-        addButton.setOnClickListener { currentDisplay += "+" }
-        subtractButton.setOnClickListener { currentDisplay += "-" }
-        multiplyButton.setOnClickListener { currentDisplay += "*" }
-        divideButton.setOnClickListener { currentDisplay += "/" }
+        addButton.setOnClickListener {
+            currentDisplay += "+"
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
+        subtractButton.setOnClickListener {
+            currentDisplay += "-"
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
+        multiplyButton.setOnClickListener {
+            currentDisplay += "*"
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
+        divideButton.setOnClickListener {
+            currentDisplay += "/"
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
 
         val clearButton: Button = findViewById(R.id.clear)
         val backspaceButton: Button = findViewById(R.id.delete)
         val equalsButton: Button = findViewById(R.id.equal)
 
-        clearButton.setOnClickListener { currentDisplay = "" }
-        backspaceButton.setOnClickListener { currentDisplay = currentDisplay.dropLast(1)}
+        clearButton.setOnClickListener {
+            currentDisplay = ""
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
+        backspaceButton.setOnClickListener {
+            currentDisplay = currentDisplay.dropLast(1)
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
+        }
         equalsButton.setOnClickListener {
             currentDisplay = calculate(currentDisplay).toString()
             resultDisplay = currentDisplay
+            expressionTextView.text = currentDisplay
+            resultTextView.text = resultDisplay
         }
 
-        val expressionTextView: TextView = findViewById(R.id.expression)
-        val resultTextView: TextView = findViewById(R.id.result)
-
-        expressionTextView.text = currentDisplay
-        resultTextView.text = resultDisplay
 
     }
 
-    private fun getNumberButtons(): MutableList<Button>{
+    private fun getNumberButtons(): MutableList<Button> {
         val numberButtons = mutableListOf<Button>()
         numberButtons.add(findViewById(R.id.zero))
         numberButtons.add(findViewById(R.id.one))
@@ -67,24 +95,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calculate(input: String): Double {
-        val postfix = parse(input)
+        val postfix = parse(input).split(" ")
+        if (postfix[0] == "") {
+            return 0.0
+        }
+        if (postfix.size == 1) {
+            return postfix[0].toDouble()
+        }
         val stack = ArrayDeque<Double>()
 
-        for (item in postfix.split(" ")) {
+        Log.d("POSTFIX DEBUG", postfix.toString())
+        for (item in postfix) {
             val parsedChar: Double? = item.toDoubleOrNull()
 
             parsedChar?.let {
                 stack.push(parsedChar)
             } ?: run {
-                val num1 = stack.pop()
                 val num2 = stack.pop()
+                val num1 = stack.pop()
+                Log.d(item, item)
                 when (item) {
                     "+" -> stack.push(num1 + num2)
                     "-" -> stack.push(num1 - num2)
                     "/" -> stack.push(num1 / num2)
                     "*" -> stack.push(num1 * num2)
-                    "^" -> stack.push(num1.pow(num2))
-                    else -> throw UnsupportedOperationException()
+                    else -> throw UnsupportedOperationException(item)
                 }
             }
         }
@@ -102,6 +137,9 @@ class MainActivity : AppCompatActivity() {
             currentChar = cleanInput[i]
 
             if (currentChar.isDigit() || currentChar == '.') {
+                if (postfix.isNotEmpty() && !postfix.last().isDigit() && postfix.last() != ' ') {
+                    postfix += " "
+                }
                 postfix += currentChar
                 continue
             } else if (postfix.isNotEmpty() && postfix.last() != ' ') {
