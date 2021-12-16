@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val subtractButton: Button = findViewById(R.id.minus)
         val multiplyButton: Button = findViewById(R.id.multiply)
         val divideButton: Button = findViewById(R.id.divide)
+        val decimalButton: Button = findViewById(R.id.decimal)
 
         addButton.setOnClickListener {
             currentDisplay += "+"
@@ -47,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         }
         divideButton.setOnClickListener {
             currentDisplay += "/"
+            expressionTextView.text = currentDisplay
+        }
+        decimalButton.setOnClickListener {
+            currentDisplay += "."
             expressionTextView.text = currentDisplay
         }
 
