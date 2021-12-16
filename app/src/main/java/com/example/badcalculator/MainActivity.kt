@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             numberButton.setOnClickListener {
                 currentDisplay += index
                 expressionTextView.text = currentDisplay
-                resultTextView.text = resultDisplay
             }
         }
 
@@ -37,22 +36,18 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             currentDisplay += "+"
             expressionTextView.text = currentDisplay
-            resultTextView.text = resultDisplay
         }
         subtractButton.setOnClickListener {
             currentDisplay += "-"
             expressionTextView.text = currentDisplay
-            resultTextView.text = resultDisplay
         }
         multiplyButton.setOnClickListener {
             currentDisplay += "*"
             expressionTextView.text = currentDisplay
-            resultTextView.text = resultDisplay
         }
         divideButton.setOnClickListener {
             currentDisplay += "/"
             expressionTextView.text = currentDisplay
-            resultTextView.text = resultDisplay
         }
 
         val clearButton: Button = findViewById(R.id.clear)
@@ -61,13 +56,13 @@ class MainActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             currentDisplay = ""
+            resultDisplay = ""
             expressionTextView.text = currentDisplay
             resultTextView.text = resultDisplay
         }
         backspaceButton.setOnClickListener {
             currentDisplay = currentDisplay.dropLast(1)
             expressionTextView.text = currentDisplay
-            resultTextView.text = resultDisplay
         }
         equalsButton.setOnClickListener {
             currentDisplay = "%.5f".format(calculate(currentDisplay))
